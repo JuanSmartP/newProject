@@ -1,0 +1,152 @@
+import 'dart:convert';
+
+import 'package:http/http.dart';
+import 'package:infancia/domain/network/service_endpoint.dart';
+import 'package:infancia/domain/preferences/preferences.dart';
+// import 'package:vesta_flutter/network/service_endpoint.dart';
+// import 'package:vesta_flutter/preferences.dart';
+
+ 
+
+final baseURLTest =
+    "https://www.bibloplus.com/~biblop/webservice/vestaTest/Consulta_General.php";
+
+final baseURLInsertTest =
+    "https://www.bibloplus.com/~biblop/webservice/vestaTest/Guardar_entrega.php";
+
+class NetworkServiceProfile {
+  NetworkServiceProfile();
+
+  Future<Map<String, dynamic>?> getMunicipios() async {
+    var alertasObjt = new Map<String, dynamic>();
+
+    NetworkServiceEndpoint endpoint = NetworkServiceEndpoint();
+
+    var url = await endpoint.getEndPoint(
+        Preferences.entidadUsuario, "Select", "Consulta");
+
+    final query =
+        "SELECT * FROM  genp_municipios WHERE FK_PAIS = '82' ORDER BY NOMBRE ASC";
+
+    alertasObjt['query'] = query;
+
+    try {
+      /*
+      final response = await post(Uri.parse(baseURLTest),
+          headers: {"Accept": "application/json"}, body: alertasObjt);*/
+
+      final response = await post(Uri.parse(url),
+          headers: {"Accept": "application/json"}, body: alertasObjt);
+      print(response.body);
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<Map<String, dynamic>?> getMunicipiosProfile(
+      String departamento) async {
+    var alertasObjt = new Map<String, dynamic>();
+
+    NetworkServiceEndpoint endpoint = NetworkServiceEndpoint();
+
+    var url = await endpoint.getEndPoint(
+        Preferences.entidadUsuario, "Select", "Consulta");
+
+    final query =
+        "SELECT * FROM  genp_municipios WHERE FK_PAIS = '${Preferences.getPkPais}' AND FK_DEPARTAMENTO = '$departamento' ORDER BY NOMBRE ASC";
+
+    alertasObjt['query'] = query;
+
+    try {
+      /*
+      final response = await post(Uri.parse(baseURLTest),
+          headers: {"Accept": "application/json"}, body: alertasObjt);*/
+
+      final response = await post(Uri.parse(url),
+          headers: {"Accept": "application/json"}, body: alertasObjt);
+      print(response.body);
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<Map<String, dynamic>?> getEstadosColombia() async {
+    var alertasObjt = new Map<String, dynamic>();
+
+    NetworkServiceEndpoint endpoint = NetworkServiceEndpoint();
+
+    var url = await endpoint.getEndPoint(
+        Preferences.entidadUsuario, "Select", "Consulta");
+
+    final query =
+        "SELECT * FROM  genp_departamentos WHERE FK_PAIS = '${Preferences.getPkPais}'";
+
+    alertasObjt['query'] = query;
+
+    try {
+      /*
+      final response = await post(Uri.parse(baseURLTest),
+          headers: {"Accept": "application/json"}, body: alertasObjt);*/
+
+      final response = await post(Uri.parse(url),
+          headers: {"Accept": "application/json"}, body: alertasObjt);
+      print(response.body);
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<Map<String, dynamic>?> updateProfile(String update) async {
+    var alertasObjt = new Map<String, dynamic>();
+
+    NetworkServiceEndpoint endpoint = NetworkServiceEndpoint();
+
+    var url = await endpoint.getEndPoint(
+        Preferences.entidadUsuario, "Select", "Consulta");
+
+    // alertasObjt['inserts'] = update;
+    alertasObjt['query'] = update;
+
+    try {
+      /*
+      final response = await post(Uri.parse(baseURLInsertTest),
+          headers: {"Accept": "application/json"}, body: alertasObjt);*/
+
+      final response = await post(Uri.parse(url),
+          headers: {"Accept": "application/json"}, body: alertasObjt);
+      print(response.body);
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<Map<String, dynamic>?> isEqualPass(String usuario) async {
+    var alertasObjt = new Map<String, dynamic>();
+
+    NetworkServiceEndpoint endpoint = NetworkServiceEndpoint();
+
+    var url = await endpoint.getEndPoint(
+        Preferences.entidadUsuario, "Select", "Consulta");
+
+    final query =
+        "SELECT CONTRASENIA FROM usu_usuarios WHERE PK_USUARIO = '$usuario'";
+
+    alertasObjt['query'] = query;
+    try {
+      /*
+      final response = await post(Uri.parse(baseURLTest),
+          headers: {"Accept": "application/json"}, body: alertasObjt);*/
+
+      final response = await post(Uri.parse(url),
+          headers: {"Accept": "application/json"}, body: alertasObjt);
+      print(response.body);
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      print(e);
+    }
+  }
+}
